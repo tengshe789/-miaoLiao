@@ -1,6 +1,6 @@
-# miaoLiao秒聊
+# miaoLiao秒聊通讯
 
-### 项目名称：秒聊
+### 项目名称：秒聊通讯
 
 秒聊爱啪啪，一个专注聊天的爱啪啪
 
@@ -14,7 +14,7 @@ IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navic
 
 ### 项目描述：
 
-*秒聊* 是一种快如闪电的聊天应用。专注聊天功能，没有多余的花哨功能，给您最好的聊天体验。
+*秒聊* 是一种快如闪电的聊天应用。专注聊天功能，没有多余的花哨功能，给您最好的聊天体验。ui方面模仿微信界面，功能有及时聊天，通讯录查看。。
 
 ### 项目特点：
 
@@ -23,7 +23,7 @@ IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navic
 
 ### 项目界面：
 
-略
+![list](http://resume.tengshe789.tech/static/im.jpg)
 
 ### 联系我：
 

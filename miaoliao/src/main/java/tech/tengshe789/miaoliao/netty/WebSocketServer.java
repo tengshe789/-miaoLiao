@@ -5,6 +5,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
  * @create: 2018-10-12 21:37
  **/
 @Component
+@Slf4j
 public class WebSocketServer {
     private static class BootWebSocketServer {
         static final WebSocketServer instance = new WebSocketServer();
@@ -39,6 +41,6 @@ public class WebSocketServer {
 
     public void start(){
         this.future = server.bind(8888);
-        System.out.println("netty 启动完毕");
+        log.info("netty 启动完毕");
     }
 }
