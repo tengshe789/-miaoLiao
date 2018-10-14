@@ -10,8 +10,9 @@ public class CodeMsg {
     private int code;
     private String msg;
 
+    public static CodeMsg SUCCESS = new CodeMsg(0, "success");
+
     //通用的错误码1001XX
-    public static CodeMsg SUCCESS = new CodeMsg(100100, "success");
     public static CodeMsg SERVER_ERROR = new CodeMsg(100101, "服务端异常");
     public static CodeMsg BIND_ERROR = new CodeMsg(100102, "参数校验异常：%s");
     public static final CodeMsg REQUEST_ILLEGAL = new CodeMsg(100103, "非法请求");

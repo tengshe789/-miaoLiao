@@ -2,13 +2,18 @@ package tech.tengshe789.miaoliao.controller;
 
 import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.n3r.idworker.Code;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import tech.tengshe789.miaoliao.bo.UserBO;
 import tech.tengshe789.miaoliao.domain.MiaoliaoUser;
+import tech.tengshe789.miaoliao.fdfs.FastDFSClient;
 import tech.tengshe789.miaoliao.result.CodeMsg;
 import tech.tengshe789.miaoliao.result.Result;
 import tech.tengshe789.miaoliao.service.UserService;
+import tech.tengshe789.miaoliao.utils.FileUtils;
 import tech.tengshe789.miaoliao.utils.MD5Utils;
 import tech.tengshe789.miaoliao.vo.UserVo;
 
@@ -25,6 +30,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    FastDFSClient fastDFSClient;
+
     @PostMapping("/do_login")
     @ResponseBody
     public Result<UserVo> registOrLogin(@RequestBody MiaoliaoUser user) throws Exception {
@@ -35,13 +43,13 @@ public class UserController {
         boolean usernameIsExist = userService.queryUsernameIsExist(user.getUsername());
         if (usernameIsExist) {
             //登陆
-            MiaoliaoUser dataSourceUser = userService.queryUserPwd(user.getUsername(),
-                    MD5Utils.getMD5Str(user.getPassword()));
-            if (dataSourceUser == null) {
+            boolean dataSourceUser = userService.queryUserPwd(user.getUsername(),
+                    user.getPassword());
+            if (dataSourceUser == false) {
                 return Result.error(CodeMsg.ERROR_PWD);
             }else {
                 UserVo userVo = new UserVo();
-                BeanUtils.copyProperties(dataSourceUser, userVo);
+                BeanUtils.copyProperties(user, userVo);
                 return Result.success(userVo);
             }
         } else {
@@ -51,6 +59,35 @@ public class UserController {
         UserVo userVo = new UserVo();
         BeanUtils.copyProperties(user,userVo);
         return Result.success(userVo);
+    }
+
+    @PostMapping("/upload_face_base64")
+    @ResponseBody
+    public Result<MiaoliaoUser> uploadFaceBase64(@RequestBody UserBO userBo) throws Exception {
+        //定义服务器路径（不能放到c盘，c盘有保护）
+        String userFacePath = "D:\\" + userBo.getUserId() + "userface64.png";
+        //获取前端base64字符串
+        String base64Data = userBo.getFaceData();
+        //转换为文件
+        FileUtils.base64ToFile(userFacePath,base64Data);
+        MultipartFile faceFile = FileUtils.fileToMultipart(userFacePath);
+        //上传
+        String url = fastDFSClient.uploadBase64(faceFile);
+        log.info(url);
+
+        //获取缩略图的url
+        String thump = "_80*80.";
+        String[] split = url.split("\\.");
+        String thumpImgUrl = split[0] + thump + split[1];
+
+        //更新头像
+        MiaoliaoUser user = new MiaoliaoUser();
+        user.setId(userBo.getUserId());
+        user.setFaceImage(thumpImgUrl);
+        user.setFaceImageBig(url);
+        userService.updateUserInfo(user);
+
+        return Result.success(user);
     }
 
 }

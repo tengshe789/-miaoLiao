@@ -44,12 +44,12 @@ public class UserService {
      * @Description: 查询用户密码是否正确
      */
     @Transactional
-    public MiaoliaoUser queryUserPwd(String username, String pwd){
+    public boolean queryUserPwd(String username, String pwd) throws Exception {
         MiaoliaoUser dataSoureceUser = userDao.getByUsername(username);
-        if (dataSoureceUser.getPassword() == pwd){
-            return dataSoureceUser;
+        if (dataSoureceUser.getPassword().equals( MD5Utils.getMD5Str(pwd))){//需要用equals方法
+            return true;
         }else {
-            return null;
+            return false;
         }
     }
 
@@ -62,22 +62,24 @@ public class UserService {
         user.setFaceImage("");
         user.setFaceImageBig("");
         user.setPassword(MD5Utils.getMD5Str(user.getPassword()));
-        user.setQrcode("null");
+        user.setQrcode("");
         user.setCid(user.getCid());
-        log.info(user.getUsername()+"正在注册");
+        log.info("用户： "+user.getUsername()+"  正在注册");
         return userDao.saveUser(user);
     }
 
     /**
      * @Description: 修改用户记录
      */
-    public MiaoliaoUser updateUserInfo(MiaoliaoUser user){
-        return null;
+    @Transactional
+    public void updateUserInfo(MiaoliaoUser user){
+        userDao.updateUserInfo(user);
     }
 
     /**
      * @Description: 搜索朋友的前置条件
      */
+    @Transactional
     public Integer preconditionSearchFriends(String myUserId, String friendUsername){
         return 0;
     }
@@ -85,6 +87,7 @@ public class UserService {
     /**
      * @Description: 根据用户名查询用户对象
      */
+    @Transactional
     public MiaoliaoUser queryUserInfoByUsername(String username){
         return null;
     }
@@ -92,6 +95,7 @@ public class UserService {
     /**
      * @Description: 添加好友请求记录，保存到数据库
      */
+    @Transactional
     public void sendFriendRequest(String myUserId, String friendUsername){
 
     }
@@ -99,6 +103,7 @@ public class UserService {
     /**
      * @Description: 查询好友请求
      */
+    @Transactional
     public List<MiaoliaoFriendRequest> queryFriendRequestList(String acceptUserId){
         return null;
     }
@@ -106,6 +111,7 @@ public class UserService {
     /**
      * @Description: 删除好友请求记录
      */
+    @Transactional
     public void deleteFriendRequest(String sendUserId, String acceptUserId){
 
     }
@@ -116,6 +122,7 @@ public class UserService {
      * 				2. 逆向保存好友
      * 				3. 删除好友请求记录
      */
+    @Transactional
     public void passFriendRequest(String sendUserId, String acceptUserId){
 
     }
@@ -123,6 +130,7 @@ public class UserService {
     /**
      * @Description: 查询好友列表
      */
+    @Transactional
     public List<MiaoliaoFriendRequest> queryMyFriends(String userId){
         return null;
     }
@@ -130,6 +138,7 @@ public class UserService {
     /**
      * @Description: 保存聊天消息到数据库
      */
+    @Transactional
     public String saveMsg(MiaoliaoChatMsg chatMsg){
         return null;
     }
@@ -137,6 +146,7 @@ public class UserService {
     /**
      * @Description: 批量签收消息
      */
+    @Transactional
     public void updateMsgSigned(List<String> msgIdList){
 
     }
@@ -144,6 +154,7 @@ public class UserService {
     /**
      * @Description: 获取未签收消息列表
      */
+    @Transactional
     public List<MiaoliaoChatMsg> getUnReadMsgList(String acceptUserId){
         return null;
     }

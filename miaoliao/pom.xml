@@ -78,6 +78,12 @@
             <version>1.1.10</version>
         </dependency>
 
+        <!--添加 FastDFS-Client-->
+        <dependency>
+            <groupId>com.github.tobato</groupId>
+            <artifactId>fastdfs-client</artifactId>
+            <version>1.26.2</version>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -144,6 +150,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>

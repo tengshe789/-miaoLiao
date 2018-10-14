@@ -6,7 +6,7 @@
 
 ### 项目技术：
 
-Java 11、SpringBoot 2、MyBatis 、Druid 1.1、Netty、Log4j、Lombok、MUI、H5+
+Java 11、SpringBoot 2、MyBatis 、Druid 1.1、Netty、Log4j、Lombok、MUI、H5+，fastDFS
 
 ### 开发工具：
 
@@ -30,6 +30,10 @@ IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navic
 微信：tengshe789
 
 ### 版本迭代Update content：
+
+#### 第2版version 0.15
+
++ 完成用户登陆后，可以自由上传图片的功能。后台文件服务器使用的是`fastDFS`搭建
 
 #### 第1版version 0.1
 
