@@ -85,9 +85,21 @@ public class UserController {
         user.setId(userBo.getUserId());
         user.setFaceImage(thumpImgUrl);
         user.setFaceImageBig(url);
-        userService.updateUserInfo(user);
+        userService.updateUserImg(user);
 
         return Result.success(user);
     }
+
+    @PostMapping("/setNickname")
+    @ResponseBody
+    public Result<MiaoliaoUser> setNickname(@RequestBody UserBO userBo) throws Exception {
+        //更新头像
+        MiaoliaoUser user = new MiaoliaoUser();
+        user.setId(userBo.getUserId());
+        user.setNickname(userBo.getNickname());
+        userService.updateUserImg(user);
+        return Result.success(user);
+    }
+
 
 }

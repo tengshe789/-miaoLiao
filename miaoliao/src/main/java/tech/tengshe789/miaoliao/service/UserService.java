@@ -69,11 +69,19 @@ public class UserService {
     }
 
     /**
-     * @Description: 修改用户记录
+     * @Description: 修改用户头像
      */
     @Transactional
-    public void updateUserInfo(MiaoliaoUser user){
-        userDao.updateUserInfo(user);
+    public void updateUserImg(MiaoliaoUser user){
+        userDao.updateUserImg(user);
+    }
+
+    /**
+     * @Description: 修改用户Nickname
+     */
+    @Transactional
+    public void updateUserNickname(MiaoliaoUser user){
+        userDao.updateUserNickname(user);
     }
 
     /**

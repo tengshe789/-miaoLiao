@@ -25,11 +25,23 @@ IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navic
 
 ![list](http://resume.tengshe789.tech/static/im.jpg)
 
+### 使用
+
+第一步：
+
+打开连接，https://www.cnblogs.com/chiangchou/p/fastdfs.html，在服务端搭建好相应的`fastDFS`
+
+
+
 ### 联系我：
 
 微信：tengshe789
 
 ### 版本迭代Update content：
+
+#### 第3版version 0.16
+
+增加了更新用户nickname功能
 
 #### 第2版version 0.15
 

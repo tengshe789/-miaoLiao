@@ -26,7 +26,10 @@ public interface MiaoliaoUserDao {
 
     @Update("update miaoliao_user set face_image =#{faceImage},face_image_big = #{faceImageBig}" +
                         " where id = #{id}")
-    public void updateUserInfo(MiaoliaoUser user);
+    public void updateUserImg(MiaoliaoUser user);
+
+    @Update("update miaoliao_user set nickname = #{nickname} where id = #{id}")
+    public void updateUserNickname(MiaoliaoUser user);
 
 
 
