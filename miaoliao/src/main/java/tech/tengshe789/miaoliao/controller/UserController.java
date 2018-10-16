@@ -28,13 +28,12 @@ import tech.tengshe789.miaoliao.vo.UserVo;
 @RequestMapping("/user")
 public class UserController {
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    FastDFSClient fastDFSClient;
+    private FastDFSClient fastDFSClient;
 
     @PostMapping("/do_login")
-    @ResponseBody
     public Result<UserVo> registOrLogin(@RequestBody MiaoliaoUser user) throws Exception {
         if (StringUtil.isNullOrEmpty(user.getUsername()) ||
                 StringUtil.isNullOrEmpty(user.getPassword())) {
@@ -62,7 +61,6 @@ public class UserController {
     }
 
     @PostMapping("/upload_face_base64")
-    @ResponseBody
     public Result<MiaoliaoUser> uploadFaceBase64(@RequestBody UserBO userBo) throws Exception {
         //定义服务器路径（不能放到c盘，c盘有保护）
         String userFacePath = "D:\\" + userBo.getUserId() + "userface64.png";
@@ -91,7 +89,6 @@ public class UserController {
     }
 
     @PostMapping("/setNickname")
-    @ResponseBody
     public Result<MiaoliaoUser> setNickname(@RequestBody UserBO userBo) throws Exception {
         //更新头像
         MiaoliaoUser user = new MiaoliaoUser();

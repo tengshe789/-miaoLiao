@@ -39,9 +39,16 @@ IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navic
 
 ### 版本迭代Update content：
 
+#### 第4版version 0.17
+
++ 增加了为每个用户生成二维码功能
+
++ UI更像微信了
++ 照着阿里规范重新排了一下代码
+
 #### 第3版version 0.16
 
-增加了更新用户nickname功能
++ 增加了更新用户nickname功能
 
 #### 第2版version 0.15
 
@@ -49,7 +56,7 @@ IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navic
 
 #### 第1版version 0.1
 
-简单聊天列表界面，后端搭建成功，未写功能
++ 简单聊天列表界面，后端搭建成功，未写功能
 
 后端项目地址：https://github.com/tengshe789/-miaoliao
 

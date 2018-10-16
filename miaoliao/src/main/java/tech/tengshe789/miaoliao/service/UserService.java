@@ -4,12 +4,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import tech.tengshe789.miaoliao.dao.MiaoliaoUserDao;
 import tech.tengshe789.miaoliao.domain.MiaoliaoChatMsg;
 import tech.tengshe789.miaoliao.domain.MiaoliaoFriendRequest;
 import tech.tengshe789.miaoliao.domain.MiaoliaoUser;
+import tech.tengshe789.miaoliao.fdfs.FastDFSClient;
+import tech.tengshe789.miaoliao.utils.FileUtils;
 import tech.tengshe789.miaoliao.utils.MD5Utils;
+import tech.tengshe789.miaoliao.utils.QRCodeUtils;
 
 import java.util.List;
 
@@ -23,15 +28,21 @@ import java.util.List;
 @Slf4j
 public class UserService {
     @Autowired
-    MiaoliaoUserDao userDao;
+    private MiaoliaoUserDao userDao;
 
     @Autowired
-    Sid sid;
+    private Sid sid;
+
+    @Autowired
+    private QRCodeUtils qrCodeUtils;
+
+    @Autowired
+    private FastDFSClient fastDFSClient;
 
     /**
      * @Description: 判断用户名是否存在
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public boolean queryUsernameIsExist(String username){
         if (userDao.getByUsername(username) == null){
             return false;
@@ -43,10 +54,11 @@ public class UserService {
     /**
      * @Description: 查询用户密码是否正确
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public boolean queryUserPwd(String username, String pwd) throws Exception {
         MiaoliaoUser dataSoureceUser = userDao.getByUsername(username);
-        if (dataSoureceUser.getPassword().equals( MD5Utils.getMD5Str(pwd))){//需要用equals方法
+        if (dataSoureceUser.getPassword().equals( MD5Utils.getMD5Str(pwd))){
+            //需要用equals方法
             return true;
         }else {
             return false;
@@ -56,14 +68,34 @@ public class UserService {
     /**
      * @Description: 用户注册
      */
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public boolean saveUser(MiaoliaoUser user) throws Exception {
-        user.setId(sid.nextShort());
+        //设置杂七杂八
+        String userId = sid.nextShort();
+        user.setId(userId);
         user.setNickname(user.getUsername());
         user.setFaceImage("");
         user.setFaceImageBig("");
         user.setPassword(MD5Utils.getMD5Str(user.getPassword()));
-        user.setQrcode("");
         user.setCid(user.getCid());
+
+        /*
+         * 设置qrCode
+         */
+        // qrcode的本地保存路径
+        String qrCodePath = "D://"+userId+"QR.png";
+        //qrcode的内容
+        String content = "miaoliao_qrcode:" + user.getUsername();
+        //创建
+        qrCodeUtils.createQRCode(qrCodePath,content);
+        //转换格式
+        MultipartFile qrFile = FileUtils.fileToMultipart(qrCodePath);
+        //上传
+        String qrCodeUrl = fastDFSClient.uploadQRCode(qrFile);
+        //up to database
+        user.setQrcode(qrCodeUrl);
+
+
         log.info("用户： "+user.getUsername()+"  正在注册");
         return userDao.saveUser(user);
     }
@@ -71,7 +103,7 @@ public class UserService {
     /**
      * @Description: 修改用户头像
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public void updateUserImg(MiaoliaoUser user){
         userDao.updateUserImg(user);
     }
@@ -79,7 +111,7 @@ public class UserService {
     /**
      * @Description: 修改用户Nickname
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public void updateUserNickname(MiaoliaoUser user){
         userDao.updateUserNickname(user);
     }
@@ -87,7 +119,7 @@ public class UserService {
     /**
      * @Description: 搜索朋友的前置条件
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public Integer preconditionSearchFriends(String myUserId, String friendUsername){
         return 0;
     }
@@ -95,7 +127,7 @@ public class UserService {
     /**
      * @Description: 根据用户名查询用户对象
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public MiaoliaoUser queryUserInfoByUsername(String username){
         return null;
     }
@@ -103,7 +135,7 @@ public class UserService {
     /**
      * @Description: 添加好友请求记录，保存到数据库
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public void sendFriendRequest(String myUserId, String friendUsername){
 
     }
@@ -111,7 +143,7 @@ public class UserService {
     /**
      * @Description: 查询好友请求
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public List<MiaoliaoFriendRequest> queryFriendRequestList(String acceptUserId){
         return null;
     }
@@ -119,7 +151,7 @@ public class UserService {
     /**
      * @Description: 删除好友请求记录
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public void deleteFriendRequest(String sendUserId, String acceptUserId){
 
     }
@@ -130,7 +162,7 @@ public class UserService {
      * 				2. 逆向保存好友
      * 				3. 删除好友请求记录
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public void passFriendRequest(String sendUserId, String acceptUserId){
 
     }
@@ -138,7 +170,7 @@ public class UserService {
     /**
      * @Description: 查询好友列表
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public List<MiaoliaoFriendRequest> queryMyFriends(String userId){
         return null;
     }
@@ -146,7 +178,7 @@ public class UserService {
     /**
      * @Description: 保存聊天消息到数据库
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public String saveMsg(MiaoliaoChatMsg chatMsg){
         return null;
     }
@@ -154,7 +186,7 @@ public class UserService {
     /**
      * @Description: 批量签收消息
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public void updateMsgSigned(List<String> msgIdList){
 
     }
@@ -162,7 +194,7 @@ public class UserService {
     /**
      * @Description: 获取未签收消息列表
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public List<MiaoliaoChatMsg> getUnReadMsgList(String acceptUserId){
         return null;
     }

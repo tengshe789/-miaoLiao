@@ -59,7 +59,8 @@ public class QRCodeUtils {
             BinaryBitmap binaryBitmap=new BinaryBitmap(new HybridBinarizer
                                     (new BufferedImageLuminanceSource(image)));
             HashMap hints=new HashMap();
-            hints.put(EncodeHintType.CHARACTER_SET,"utf-8");    //指定字符编码为“utf-8”
+            //指定字符编码为“utf-8”
+            hints.put(EncodeHintType.CHARACTER_SET,"utf-8");
             Result result=formatReader.decode(binaryBitmap,hints);
             return result.toString();
         } catch (Exception e) {
