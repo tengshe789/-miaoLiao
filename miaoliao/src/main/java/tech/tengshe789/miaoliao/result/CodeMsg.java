@@ -23,6 +23,10 @@ public class CodeMsg {
     public static CodeMsg ERROR_PWD= new CodeMsg(100201, "密码错误");
 
 
+    //好友查询添加模块 1003XX
+    public static CodeMsg NULL_USER = new CodeMsg(100301, "没有当前用户~");
+    public static CodeMsg NAME_IS_MINE = new CodeMsg(100302, "查找的当前用户名是自己的");
+    public static CodeMsg FRIEND_IS_YOURS = new CodeMsg(100303, "该用户已经是你好友了");
 
     private CodeMsg( ) {
     }

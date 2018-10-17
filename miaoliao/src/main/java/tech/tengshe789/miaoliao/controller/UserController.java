@@ -33,6 +33,12 @@ public class UserController {
     @Autowired
     private FastDFSClient fastDFSClient;
 
+    /**
+     * 用户登陆
+     * @param user
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/do_login")
     public Result<UserVo> registOrLogin(@RequestBody MiaoliaoUser user) throws Exception {
         if (StringUtil.isNullOrEmpty(user.getUsername()) ||
@@ -60,6 +66,12 @@ public class UserController {
         return Result.success(userVo);
     }
 
+    /**
+     * 设置用户头像
+     * @param userBo
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/upload_face_base64")
     public Result<MiaoliaoUser> uploadFaceBase64(@RequestBody UserBO userBo) throws Exception {
         //定义服务器路径（不能放到c盘，c盘有保护）
@@ -88,6 +100,12 @@ public class UserController {
         return Result.success(user);
     }
 
+    /**
+     * 设置用户nickname
+     * @param userBo
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/setNickname")
     public Result<MiaoliaoUser> setNickname(@RequestBody UserBO userBo) throws Exception {
         //更新头像
@@ -97,6 +115,32 @@ public class UserController {
         userService.updateUserImg(user);
         return Result.success(user);
     }
+
+    /**
+     * 搜索好友
+     * @param myUserId
+     * @param friendUsername
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/search")
+    public Result<String> searchUser(String myUserId,String friendUsername) throws Exception {
+        if (StringUtil.isNullOrEmpty(myUserId) ||
+                StringUtil.isNullOrEmpty(friendUsername)){
+            return Result.error(CodeMsg.NULL_USER);
+        }
+        int code = userService.searchFriends(myUserId,friendUsername);
+        if (code == 1 ){
+            return Result.error(CodeMsg.NULL_USER);
+        }else if (code == 2){
+            return Result.error(CodeMsg.NAME_IS_MINE);
+        }else if (code == 3){
+            return Result.error(CodeMsg.FRIEND_IS_YOURS);
+        }else{
+            return Result.success("查询成功");
+        }
+    }
+
 
 
 }

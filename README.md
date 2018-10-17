@@ -31,6 +31,8 @@ IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navic
 
 打开连接，https://www.cnblogs.com/chiangchou/p/fastdfs.html，在服务端搭建好相应的`fastDFS`
 
+第二步：
+
 
 
 ### 联系我：
@@ -38,6 +40,11 @@ IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navic
 微信：tengshe789
 
 ### 版本迭代Update content：
+
+#### 第5版version 0.18
+
+- 增加了搜索好友功能
+- UI重构
 
 #### 第4版version 0.17
 
@@ -62,3 +69,6 @@ IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navic
 
 前端项目地址：https://github.com/tengshe789/miaoliao-frontend
 
+## 推荐参考资料
+
+闪电侠的netty ： https://juejin.im/book/5b4bc28bf265da0f60130116
