@@ -1,6 +1,7 @@
 package tech.tengshe789.miaoliao.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
@@ -10,7 +11,8 @@ import java.util.Date;
  * @author: tEngSHe789
  * @create: 2018-10-12 21:17
  **/
-@Data
+@Getter
+@Setter
 public class MiaoliaoFriendRequest {
 
     private String id;
@@ -19,6 +21,6 @@ public class MiaoliaoFriendRequest {
 
     private String acceptUserId;
 
-    private String msg;
+    private Date requestDateTime;
 
 }

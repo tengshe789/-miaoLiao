@@ -41,6 +41,10 @@ IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navic
 
 ### 版本迭代Update content：
 
+#### 第6版version 0.19
+
+- 增加了添加好友功能
+
 #### 第5版version 0.18
 
 - 增加了搜索好友功能

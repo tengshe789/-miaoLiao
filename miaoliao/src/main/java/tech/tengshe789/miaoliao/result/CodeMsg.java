@@ -1,10 +1,8 @@
 package tech.tengshe789.miaoliao.result;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class CodeMsg {
 
     private int code;
@@ -27,6 +25,7 @@ public class CodeMsg {
     public static CodeMsg NULL_USER = new CodeMsg(100301, "没有当前用户~");
     public static CodeMsg NAME_IS_MINE = new CodeMsg(100302, "查找的当前用户名是自己的");
     public static CodeMsg FRIEND_IS_YOURS = new CodeMsg(100303, "该用户已经是你好友了");
+    public static CodeMsg ADD_FRIEND_ERROR = new CodeMsg(100304, "添加好友失败！");
 
     private CodeMsg( ) {
     }
@@ -42,11 +41,5 @@ public class CodeMsg {
         String message = String.format(this.msg, args);
         return new CodeMsg(code, message);
     }
-
-    @Override
-    public String toString() {
-        return "CodeMsg [code=" + code + ", msg=" + msg + "]";
-    }
-
 
 }

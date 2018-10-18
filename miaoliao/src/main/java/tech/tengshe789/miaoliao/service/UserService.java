@@ -7,14 +7,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import tech.tengshe789.miaoliao.dao.MiaoliaoChatMsgDao;
+import tech.tengshe789.miaoliao.dao.MiaoliaoFriendRequestDao;
 import tech.tengshe789.miaoliao.dao.MiaoliaoMyFriendsDao;
 import tech.tengshe789.miaoliao.dao.MiaoliaoUserDao;
+import tech.tengshe789.miaoliao.domain.MiaoliaoFriendRequest;
 import tech.tengshe789.miaoliao.domain.MiaoliaoUser;
 import tech.tengshe789.miaoliao.fdfs.FastDFSClient;
 import tech.tengshe789.miaoliao.utils.FileUtils;
 import tech.tengshe789.miaoliao.utils.MD5Utils;
 import tech.tengshe789.miaoliao.utils.QRCodeUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,6 +37,12 @@ public class UserService {
     private MiaoliaoMyFriendsDao miaoliaoMyFriendsDao;
 
     @Autowired
+    MiaoliaoFriendRequestDao miaoliaoFriendRequestDao;
+
+    @Autowired
+    MiaoliaoChatMsgDao miaoliaoChatMsgDao;
+
+    @Autowired
     private Sid sid;
 
     @Autowired
@@ -46,7 +56,7 @@ public class UserService {
      * @param username
      * @return
      */
-    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
+    @Transactional(propagation = Propagation.SUPPORTS,rollbackFor =  {Exception.class})
     public boolean queryUsernameIsExist(String username){
         if (userDao.getByUsername(username) == null){
             return false;
@@ -130,7 +140,10 @@ public class UserService {
     }
 
     /**
-     * @Description: 搜索朋友
+     * 搜索朋友
+     * @param myUserId
+     * @param friendUsername
+     * @return 自定义参数
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public Integer searchFriends(String myUserId, String friendUsername){
@@ -154,6 +167,28 @@ public class UserService {
         }
 
         return 0;
+    }
+
+    /**
+     *  保存发送好友申请的请求
+     * @param myUserId
+     * @param friendUsername
+     */
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
+    public MiaoliaoFriendRequest sendFriendResquest(String myUserId, String friendUsername){
+        MiaoliaoUser friend = userDao.getByUsername(friendUsername);
+        MiaoliaoFriendRequest miaoliaoFriendRequest = miaoliaoFriendRequestDao.searchFriendResquest(myUserId);
+        if (miaoliaoFriendRequest == null){
+            String requestId = sid.nextShort();
+            //添加好友请求
+            MiaoliaoFriendRequest request = new MiaoliaoFriendRequest();
+            request.setId(requestId);
+            request.setSendUserId(myUserId);
+            request.setAcceptUserId(friend.getId());
+            request.setRequestDateTime(new Date());
+            return miaoliaoFriendRequestDao.saveFriendRequest(request);
+        }
+        return null;
     }
 
 

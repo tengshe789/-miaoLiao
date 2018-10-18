@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tech.tengshe789.miaoliao.bo.UserBO;
+import tech.tengshe789.miaoliao.domain.MiaoliaoFriendRequest;
 import tech.tengshe789.miaoliao.domain.MiaoliaoUser;
 import tech.tengshe789.miaoliao.fdfs.FastDFSClient;
 import tech.tengshe789.miaoliao.result.CodeMsg;
@@ -134,13 +135,29 @@ public class UserController {
             return Result.error(CodeMsg.NULL_USER);
         }else if (code == 2){
             return Result.error(CodeMsg.NAME_IS_MINE);
-        }else if (code == 3){
-            return Result.error(CodeMsg.FRIEND_IS_YOURS);
         }else{
             return Result.success("查询成功");
         }
     }
 
+    @PostMapping("/addFriendRequest")
+    public Result<MiaoliaoFriendRequest> addFriendRequest(String myUserId,String friendUsername) throws Exception {
+        if (StringUtil.isNullOrEmpty(myUserId) ||
+                StringUtil.isNullOrEmpty(friendUsername)){
+            return Result.error(CodeMsg.NULL_USER);
+        }
+        int code = userService.searchFriends(myUserId,friendUsername);
+        if (code == 3){
+            return Result.error(CodeMsg.FRIEND_IS_YOURS);
+        }
 
+        MiaoliaoFriendRequest request = userService.sendFriendResquest(myUserId, friendUsername);
+        if (request == null){
+            return Result.error(CodeMsg.ADD_FRIEND_ERROR);
+        }else {
+            return Result.success(request);
+        }
+
+    }
 
 }

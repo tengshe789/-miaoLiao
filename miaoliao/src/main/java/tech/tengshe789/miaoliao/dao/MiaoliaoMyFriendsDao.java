@@ -12,11 +12,6 @@ import java.util.List;
 @Mapper
 @Component
 public interface MiaoliaoMyFriendsDao {
-    @Select("select my_friend_user_id from miaoliao_my_friend where my_user_id = #{myUserId}")
+    @Select("select my_friend_user_id from miaoliao_my_friends where my_user_id = #{myUserId}")
     public List<String> searchFriendIdByMyId(@Param("myUserId")String myUserId);
-
-    @Insert("insert into miaoliao_user(id, username,password,face_image,face_image_big," +
-            "nickname,qrcode,cid) values(#{id}, #{username}, #{password}, #{faceImage}, #{faceImageBig}, " +
-            "#{nickname},#{qrcode},#{cid})")
-    public boolean saveFriend(MiaoliaoUser user);
 }
