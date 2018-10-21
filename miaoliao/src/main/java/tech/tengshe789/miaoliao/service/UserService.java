@@ -68,6 +68,21 @@ public class UserService {
     }
 
     /**
+     * 通过用户名查询用户
+     * @param username
+     * @return
+     */
+    @Transactional(propagation = Propagation.SUPPORTS,rollbackFor =  {Exception.class})
+    public MiaoliaoUser queryUserByUsername(String username){
+        MiaoliaoUser user = userDao.getByUsername(username);
+        if (user == null){
+            return null;
+        }else {
+            return user;
+        }
+    }
+
+    /**
      * 查询用户密码是否正确
      * @param username
      * @param pwd
@@ -177,12 +192,11 @@ public class UserService {
      * @param friendUsername
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
-    public MiaoliaoFriendRequest sendFriendResquest(String myUserId, String friendUsername){
+    public boolean sendFriendResquest(String myUserId, String friendUsername){
         MiaoliaoUser friend = userDao.getByUsername(friendUsername);
-        //这里有个bug
-        //经过断点，查到的friend的对象是null的，所以这里会报空指针错误？
-        //为什么呢？
-        MiaoliaoFriendRequest miaoliaoFriendRequest = miaoliaoFriendRequestDao.searchFriendResquest(myUserId);
+        String friendId = friend.getId();
+        MiaoliaoFriendRequest miaoliaoFriendRequest =
+                miaoliaoFriendRequestDao.searchFriendResquest(myUserId, friendId);
         //如果不是好友
         if (miaoliaoFriendRequest == null){
             log.info("不是好友");
@@ -190,11 +204,11 @@ public class UserService {
             MiaoliaoFriendRequest request = new MiaoliaoFriendRequest();
             request.setId(sid.nextShort());
             request.setSendUserId(myUserId);
-            request.setAcceptUserId(friend.getId());
+            request.setAcceptUserId(friendId);
             request.setRequestDateTime(new Date());
             return miaoliaoFriendRequestDao.saveFriendRequest(request);
         }
-        return miaoliaoFriendRequest;
+        return false;
     }
 
     /**

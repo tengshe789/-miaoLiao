@@ -41,6 +41,10 @@ IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navic
 
 ### 版本迭代Update content：
 
+#### 第8版version 0.21
+
+解决下面的bug😝
+
 #### 第7版version 0.20
 
 找了好久的bug，还是没有想明白。
@@ -84,4 +88,4 @@ IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navic
 
 ## 推荐参考资料
 
-闪电侠的netty ： https://juejin.im/book/5b4bc28bf265da0f60130116
+闪电侠的netty ： https://juejin.im/book/5b4bc28bf265da0f601301161

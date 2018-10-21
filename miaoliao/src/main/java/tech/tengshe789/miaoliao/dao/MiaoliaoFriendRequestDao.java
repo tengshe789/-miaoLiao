@@ -11,13 +11,15 @@ import java.util.List;
 @Mapper
 @Component
 public interface MiaoliaoFriendRequestDao {
-    @Select("select accept_user_id from miaoliao_friend_request where send_user_id= #{myUserId}")
-    public MiaoliaoFriendRequest searchFriendResquest(@Param("myUserId")String myUserId);
+    @Select("select accept_user_id from miaoliao_friend_request " +
+            "where send_user_id= #{myUserId} and accept_user_id=#{friendId}")
+    public MiaoliaoFriendRequest searchFriendResquest(@Param("myUserId")String myUserId,
+                                                            @Param("friendId")String friendId);
 
     @Insert("insert into miaoliao_friend_request" +
             "(id, send_user_id,accept_user_id,request_date_time) " +
             "values(#{id}, #{sendUserId}, #{acceptUserId}, #{requestDateTime})")
-    public MiaoliaoFriendRequest saveFriendRequest(MiaoliaoFriendRequest userRequest);
+    public boolean saveFriendRequest(MiaoliaoFriendRequest userRequest);
 
     @Select("select sender.id as sendUserId,sender.username as sendUsername,  " +
             "sender.face_image as sendFaceImage ,sender.nickname as sendNickname" +
