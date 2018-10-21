@@ -22,9 +22,9 @@ public interface MiaoliaoFriendRequestDao {
     public boolean saveFriendRequest(MiaoliaoFriendRequest userRequest);
 
     @Select("select sender.id as sendUserId,sender.username as sendUsername,  " +
-            "sender.face_image as sendFaceImage ,sender.nickname as sendNickname" +
-            "from miaoliao_friend_request fr left join miaoliao_user sender" +
-            "on fr.send_user_id = sender" +
+            "sender.face_image as sendFaceImage ,sender.nickname as sendNickname " +
+            "from miaoliao_friend_request fr left join miaoliao_user sender " +
+            "on fr.send_user_id = sender.id " +
             "where fr.accept_user_id = #{acceptUserId}")
     public List<FriendRequestVO> queryFriendRequestList(@Param("acceptUserId") String acceptUserId);
 

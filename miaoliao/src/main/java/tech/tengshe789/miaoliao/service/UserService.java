@@ -199,7 +199,7 @@ public class UserService {
                 miaoliaoFriendRequestDao.searchFriendResquest(myUserId, friendId);
         //如果不是好友
         if (miaoliaoFriendRequest == null){
-            log.info("不是好友");
+//            log.info("不是好友");
             //添加好友请求
             MiaoliaoFriendRequest request = new MiaoliaoFriendRequest();
             request.setId(sid.nextShort());

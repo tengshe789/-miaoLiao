@@ -1,16 +1,24 @@
 # miaoLiao秒聊通讯
 
+
+
 ### 项目名称：秒聊通讯
 
 秒聊爱啪啪，一个专注聊天的爱啪啪
 
+
+
 ### 项目技术：
 
-Java 11、SpringBoot 2、MyBatis 、Druid 1.1、Netty、Log4j、Lombok、MUI、H5+，fastDFS
+Java 11、SpringBoot 2、MyBatis 、Druid、Netty、Log4j、Lombok、MUI、H5+，fastDFS
+
+
 
 ### 开发工具：
 
 IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navicat
+
+
 
 ### 项目描述：
 
@@ -20,6 +28,8 @@ IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navic
 
 1. 基于`SpringBoot`，简化了大量项目配置和`maven`依赖，让您更专注于业务开发，独特的分包方式，代码多而不乱。
 2. 使用`netty`主从线程模型（请看我[博客](https://blog.tengshe789.tech/2018/08/25/io%E6%A8%A1%E5%9E%8B/#more)），基于`js`的`websocket`相关`api`实现前后端聊天通信
+
+
 
 ### 项目界面：
 
@@ -39,7 +49,16 @@ IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navic
 
 微信：tengshe789
 
+
+
 ### 版本迭代Update content：
+
+#### 第9版version 0.22
+
++ 修复查询好友请求异常的bug（数据库语句少写一个空格）
++ 增加`springboot`热部署工具
++ 将`springboot`版本升级到2.0.6
++ 将`druid`升级到1.1.12,并开启监控（admin）
 
 #### 第8版version 0.21
 
@@ -47,7 +66,7 @@ IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navic
 
 #### 第7版version 0.20
 
-找了好久的bug，还是没有想明白。
+- 找了好久的bug，还是没有想明白。
 
 `Service`中第180行的`sendFriendResquest`方法，查找用户为null，造成空指针错误，为什么呢？？？
 

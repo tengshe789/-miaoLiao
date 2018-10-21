@@ -2,6 +2,7 @@ package tech.tengshe789.miaoliao.controller;
 
 import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.n3r.idworker.Code;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,22 +166,24 @@ public class UserController {
         if (isResquest == false){
             return Result.error(CodeMsg.ADD_FRIEND_ERROR);
         }else {
-            return Result.success("添加成功！！！");
+            return Result.success("请求已发送！");
         }
 
     }
 
     /**
      * 查询好友请求
-     * @param myUserId
+     * @param userId
      * @return
      */
     @PostMapping("/queryFriendRequests")
-    public Result<List> queryFriendRequests(String myUserId){
-        if (StringUtil.isNullOrEmpty(myUserId)){
+    public Result<List> queryFriendRequests(@Param("userId") String userId){
+        if (StringUtil.isNullOrEmpty(userId)){
             return Result.error(CodeMsg.CLIENT_ERROR);
         }
-        return Result.success(userService.queryFriendRequestList(myUserId));
+        List<FriendRequestVO> friendList = userService.queryFriendRequestList(userId);
+        log.info("查询用户list");
+        return Result.success(friendList);
     }
 
     /**
