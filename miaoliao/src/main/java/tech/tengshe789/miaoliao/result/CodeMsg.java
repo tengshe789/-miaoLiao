@@ -26,6 +26,12 @@ public class CodeMsg {
     public static CodeMsg NAME_IS_MINE = new CodeMsg(100302, "查找的当前用户名是自己的");
     public static CodeMsg FRIEND_IS_YOURS = new CodeMsg(100303, "该用户已经是你好友了");
     public static CodeMsg ADD_FRIEND_ERROR = new CodeMsg(100304, "添加好友失败！");
+    public static CodeMsg CLIENT_ERROR = new CodeMsg(100305, "客户端错误！");
+
+    //好友请求模块 1004XX
+    public static CodeMsg INVALID_DATA = new CodeMsg(100400, "信息无效");
+    public static CodeMsg IGNORE = new CodeMsg(100401, "忽略好友请求");
+
 
     private CodeMsg( ) {
     }

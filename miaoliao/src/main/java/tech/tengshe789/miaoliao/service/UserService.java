@@ -12,11 +12,13 @@ import tech.tengshe789.miaoliao.dao.MiaoliaoFriendRequestDao;
 import tech.tengshe789.miaoliao.dao.MiaoliaoMyFriendsDao;
 import tech.tengshe789.miaoliao.dao.MiaoliaoUserDao;
 import tech.tengshe789.miaoliao.domain.MiaoliaoFriendRequest;
+import tech.tengshe789.miaoliao.domain.MiaoliaoMyFriends;
 import tech.tengshe789.miaoliao.domain.MiaoliaoUser;
 import tech.tengshe789.miaoliao.fdfs.FastDFSClient;
 import tech.tengshe789.miaoliao.utils.FileUtils;
 import tech.tengshe789.miaoliao.utils.MD5Utils;
 import tech.tengshe789.miaoliao.utils.QRCodeUtils;
+import tech.tengshe789.miaoliao.vo.FriendRequestVO;
 
 import java.util.Date;
 import java.util.List;
@@ -177,20 +179,54 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
     public MiaoliaoFriendRequest sendFriendResquest(String myUserId, String friendUsername){
         MiaoliaoUser friend = userDao.getByUsername(friendUsername);
+        //这里有个bug
+        //经过断点，查到的friend的对象是null的，所以这里会报空指针错误？
+        //为什么呢？
         MiaoliaoFriendRequest miaoliaoFriendRequest = miaoliaoFriendRequestDao.searchFriendResquest(myUserId);
+        //如果不是好友
         if (miaoliaoFriendRequest == null){
-            String requestId = sid.nextShort();
+            log.info("不是好友");
             //添加好友请求
             MiaoliaoFriendRequest request = new MiaoliaoFriendRequest();
-            request.setId(requestId);
+            request.setId(sid.nextShort());
             request.setSendUserId(myUserId);
             request.setAcceptUserId(friend.getId());
             request.setRequestDateTime(new Date());
             return miaoliaoFriendRequestDao.saveFriendRequest(request);
         }
-        return null;
+        return miaoliaoFriendRequest;
     }
 
+    /**
+     * 查询好友请求
+     * @param acceptUserId
+     * @return
+     */
+    @Transactional(propagation = Propagation.SUPPORTS,rollbackFor =  {Exception.class})
+    public List<FriendRequestVO> queryFriendRequestList(String acceptUserId){
+        return miaoliaoFriendRequestDao.queryFriendRequestList(acceptUserId);
+    }
 
+    /**
+     * 删除好友请求
+     * @param sendId
+     */
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
+    public void deleteFriendRequest(String sendId,String acceptUserId){
+        miaoliaoFriendRequestDao.deleteFriendRequestList(sendId,acceptUserId);
+    }
 
+    /**
+     * 保存 一个好友关系
+     * @param sendId
+     * @param acceptUserId
+     */
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor =  {Exception.class})
+    public void saveFriends(String sendId,String acceptUserId){
+        MiaoliaoMyFriends myFriends = new MiaoliaoMyFriends();
+        myFriends.setId(sid.nextShort());
+        myFriends.setMyUserId(sendId);
+        myFriends.setMyFriendUserId(acceptUserId);
+        miaoliaoMyFriendsDao.saveFriends(myFriends);
+    }
 }

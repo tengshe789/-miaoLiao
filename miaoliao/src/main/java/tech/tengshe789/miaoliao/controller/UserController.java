@@ -16,7 +16,10 @@ import tech.tengshe789.miaoliao.result.Result;
 import tech.tengshe789.miaoliao.service.UserService;
 import tech.tengshe789.miaoliao.utils.FileUtils;
 import tech.tengshe789.miaoliao.utils.MD5Utils;
+import tech.tengshe789.miaoliao.vo.FriendRequestVO;
 import tech.tengshe789.miaoliao.vo.UserVo;
+
+import java.util.List;
 
 /**
  * @program: miaoliao
@@ -125,7 +128,8 @@ public class UserController {
      * @throws Exception
      */
     @PostMapping("/search")
-    public Result<String> searchUser(String myUserId,String friendUsername) throws Exception {
+    public Result<String> searchUser(@RequestParam("myUserId")String myUserId,
+                                     @RequestParam("friendUsername")String friendUsername) throws Exception {
         if (StringUtil.isNullOrEmpty(myUserId) ||
                 StringUtil.isNullOrEmpty(friendUsername)){
             return Result.error(CodeMsg.NULL_USER);
@@ -140,15 +144,19 @@ public class UserController {
         }
     }
 
+    /**
+     * 添加好友请求
+     * @param myUserId
+     * @param friendUsername
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/addFriendRequest")
-    public Result<MiaoliaoFriendRequest> addFriendRequest(String myUserId,String friendUsername) throws Exception {
+    public Result<MiaoliaoFriendRequest> addFriendRequest(@RequestParam("myUserId")String myUserId,
+                                                          @RequestParam("friendUsername")String friendUsername) {
         if (StringUtil.isNullOrEmpty(myUserId) ||
                 StringUtil.isNullOrEmpty(friendUsername)){
             return Result.error(CodeMsg.NULL_USER);
-        }
-        int code = userService.searchFriends(myUserId,friendUsername);
-        if (code == 3){
-            return Result.error(CodeMsg.FRIEND_IS_YOURS);
         }
 
         MiaoliaoFriendRequest request = userService.sendFriendResquest(myUserId, friendUsername);
@@ -158,6 +166,71 @@ public class UserController {
             return Result.success(request);
         }
 
+    }
+
+    /**
+     * 查询好友请求
+     * @param myUserId
+     * @return
+     */
+    @PostMapping("/queryFriendRequests")
+    public Result<List> queryFriendRequests(String myUserId){
+        if (StringUtil.isNullOrEmpty(myUserId)){
+            return Result.error(CodeMsg.CLIENT_ERROR);
+        }
+        return Result.success(userService.queryFriendRequestList(myUserId));
+    }
+
+    /**
+     * 接受对方 通过或忽略好友请求
+     * @param acceptUserId
+     * @param sendUserId
+     * @param operType 1是确认好友请求 2是忽略
+     * @return
+     */
+    @PostMapping("/operFriendRequest")
+    public Result<List> operFriendRequest(String acceptUserId, String sendUserId,Integer operType){
+        if (StringUtil.isNullOrEmpty(acceptUserId) || StringUtil.isNullOrEmpty(sendUserId) ||
+                operType == null){
+            return Result.error(CodeMsg.INVALID_DATA);
+        }
+        if (operType == 1){
+            //确认好友请求时
+            userService.saveFriends(sendUserId,acceptUserId);
+            userService.saveFriends(acceptUserId,sendUserId);
+            userService.deleteFriendRequest(sendUserId,acceptUserId);
+        }else if (operType == 0){
+            //忽略好友请求时
+            userService.deleteFriendRequest(sendUserId,acceptUserId);
+        }
+
+        //查询好友请求
+        List<FriendRequestVO> friendRequestVOS = userService.queryFriendRequestList(acceptUserId);
+        return Result.success(friendRequestVOS);
+    }
+
+    @PostMapping("/getUnReadMsgList")
+    public Result<List> getUnReadMsgList(String myUserId){
+        if (StringUtil.isNullOrEmpty(myUserId)){
+            return Result.error(CodeMsg.CLIENT_ERROR);
+        }
+        return Result.success(userService.queryFriendRequestList(myUserId));
+    }
+
+    @PostMapping("/myFriends")
+    public Result<List> myFriends(String myUserId){
+        if (StringUtil.isNullOrEmpty(myUserId)){
+            return Result.error(CodeMsg.CLIENT_ERROR);
+        }
+        return Result.success(userService.queryFriendRequestList(myUserId));
+    }
+
+    @PostMapping("/operFriendRequest")
+    public Result<List> operFriendRequest(String myUserId){
+        if (StringUtil.isNullOrEmpty(myUserId)){
+            return Result.error(CodeMsg.CLIENT_ERROR);
+        }
+        return Result.success(userService.queryFriendRequestList(myUserId));
     }
 
 }

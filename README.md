@@ -41,6 +41,15 @@ IntelliJ IDEA  x64、Hbuilder、MySQL 80、Tomcat、Linux、Maven3、Git、Navic
 
 ### 版本迭代Update content：
 
+#### 第7版version 0.20
+
+找了好久的bug，还是没有想明白。
+
+`Service`中第180行的`sendFriendResquest`方法，查找用户为null，造成空指针错误，为什么呢？？？
+
++ 增加保存好友
++ 增加删除好友
+
 #### 第6版version 0.19
 
 - 增加了添加好友功能
